@@ -230,7 +230,7 @@ AUTOMATACI_LANG = ''
 # shall notify the CI provider to setup a localized virtual environment for
 # development automatically.
 #
-# To enable it: simply supply the path (e.g. default is 'srcANGULAR').
+# To enable it: simply supply the path (e.g. 'Angular' for 'Angular/').
 # To disable it: simply supply an empty path (e.g. default is '').
 PROJECT_ANGULAR = ''
 
