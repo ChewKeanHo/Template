@@ -1,6 +1,7 @@
 #!/bin/sh
 # Copyright 2023 (Holloway) Chew, Kean Ho <hollowaykeanho@gmail.com>
 #
+#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License. You may obtain a copy of
 # the License at:
@@ -50,7 +51,7 @@ else
                 return 1
         fi
 
-        CHROME_BIN="${___browser}" ANGULAR_Test
+        CHROME_BIN="${___browser}" ./test.sh.ps1
         if [ $? -ne 0 ]; then
                 I18N_Run_Failed
                 return 1

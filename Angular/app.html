@@ -1,15 +1,20 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>Website</title>
+	<meta charset="UTF-8"/>
+	<title>TITLE</title>
 	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="DESCRIPTION" />
+	<meta name="keywords" content="KEYWORDS" />
+
+	<!-- ld+json -->
+	<script type="application/ld+json"></script>
 
 	<!-- PWA -->
-	<link rel="icon" type="image/x-icon" href="/logos/icon.ico">
-	<link rel="manifest" href="/manifest.webmanifest">
-	<meta name="theme-color" content="#0000FF">
+	<link rel="icon" type="image/x-icon" href="/logos/icon.ico" />
+	<link rel="manifest" href="/manifest.webmanifest" />
+	<meta name="theme-color" content="#0000FF" />
 	<meta name="msapplication-TileColor" content="#021B79" />
 	<meta name="msapplication-config" content="/browserconfig.xml" />
 	<link rel='mask-icon'
@@ -114,6 +119,34 @@
 	<!-- favicon 1200x1200 -->
 	<link rel='icon' type='image/png' sizes='1200x1200' href='/logos/icon_1200x1200.png' />
 	<link rel='icon' type='image/svg+xml' href='/logos/icon_1200x1200.svg' />
+
+	<!-- open-graph -->
+	<meta property="og:title" content="TITLE" />
+	<meta property="og:site_name" content="SITE_NAME" />
+	<meta property="og:locale" content="LANG" />
+	<meta property="og:description" content="DESCRIPTION" />
+	<meta property="og:url" content="/" />
+
+	<!-- open-graph thumbnail (wide) -->
+	<meta property="og:image" content="/thumbnails/default_1200x630.png" />
+	<meta property="og:image:type" content="image/png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content="TITLE" />
+
+	<meta property="og:image" content="/thumbnails/default_1200x1200.png" />
+	<meta property="og:image:type" content="image/png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="1200" />
+	<meta property="og:image:alt" content="TITLE" />
+
+	<meta property="og:image" content="/thumbnails/default_480x480.png" />
+	<meta property="og:image:type" content="image/png" />
+	<meta property="og:image:width" content="480" />
+	<meta property="og:image:height" content="480" />
+	<meta property="og:image:alt" content="TITLE" />
+
+	<!-- engine takesover here -->
 </head>
 <body>
 	<app-root></app-root>

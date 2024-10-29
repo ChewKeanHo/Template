@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2023 (Holloway) Chew, Kean Ho <hollowaykeanho@gmail.com>
+# Copyright 2024 (Holloway) Chew, Kean Ho <hollowaykeanho@gmail.com>
 #
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -22,30 +22,19 @@ if [ "$PROJECT_PATH_ROOT" = "" ]; then
 fi
 
 . "${LIBS_AUTOMATACI}/services/io/fs.sh"
-. "${LIBS_AUTOMATACI}/services/i18n/translations.sh"
-. "${LIBS_AUTOMATACI}/services/compilers/angular.sh"
 
 
 
 
 # execute
-I18N_Activate_Environment
-ANGULAR_Is_Available
-if [ $? -ne 0 ]; then
-        I18N_Activate_Failed
-        return 1
-fi
+__current_path="$PWD"
+cd "${PROJECT_PATH_ROOT}/${PROJECT_ANGULAR}"
 
+FS_Remove_Silently "dist"
+FS_Remove_Silently "node_modules"
 
-I18N_Build "$PROJECT_ANGULAR"
-__current_path="$PWD" && cd "${PROJECT_PATH_ROOT}/${PROJECT_ANGULAR}"
-./build.sh.ps1
-___process=$?
-cd "$__current_path" && unset __current_path
-if [ $___process -ne 0 ]; then
-        I18N_Build_Failed
-        return 1
-fi
+cd "$__current_path"
+unset __current_path
 
 
 

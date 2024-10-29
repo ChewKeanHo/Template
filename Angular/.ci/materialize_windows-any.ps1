@@ -1,5 +1,6 @@
 # Copyright 2023 (Holloway) Chew, Kean Ho <hollowaykeanho@gmail.com>
 #
+#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License. You may obtain a copy
 # of the License at:
@@ -39,7 +40,7 @@ if ($___process -ne 0) {
 $null = I18N-Build "${env:PROJECT_ANGULAR}"
 $__current_path = Get-Location
 $null = Set-Location "${env:PROJECT_PATH_ROOT}\${env:PROJECT_ANGULAR}"
-$___process = Angular-Build
+$___process = OS-Exec "./build.sh.ps1"
 $null = Set-Location "${__current_path}"
 $null = Remove-Variable __current_path
 if ($___process -ne 0) {

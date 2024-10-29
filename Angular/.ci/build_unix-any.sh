@@ -1,6 +1,7 @@
 #!/bin/sh
 # Copyright 2023 (Holloway) Chew, Kean Ho <hollowaykeanho@gmail.com>
 #
+#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License. You may obtain a copy of
 # the License at:
@@ -46,7 +47,7 @@ fi
 
 I18N_Build "$PROJECT_ANGULAR"
 __current_path="$PWD" && cd "${PROJECT_PATH_ROOT}/${PROJECT_ANGULAR}"
-ANGULAR_Build
+./build.sh.ps1
 ___process=$?
 cd "$__current_path" && unset __current_path
 if [ $___process -ne 0 ]; then

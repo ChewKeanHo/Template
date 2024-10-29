@@ -11,10 +11,29 @@ import { Page_Lang } from "./contents/lang/page";
 
 
 export const routes: Routes = [
-	{ path: '', component: Page_Root },
-	{ path: 'en', component: Page_Lang, data: { lang: 'en' } },
+	// landing page
+	{
+		path: '',
+		component: Page_Root,
+		data: {
+			lang: '',
+		},
+	},
+
+
+	// main page by language
+	{
+		path: 'en',
+		component: Page_Lang,
+		data: {
+			lang: 'en',
+		},
+	},
 
 
 	// catch all
-	{ path: '**', component: Page_404 },
+	{
+		path: '**',
+		component: Page_404,
+	},
 ];

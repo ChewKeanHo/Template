@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "clear && ng serve",
-    "build": "clear && ng build",
-    "watch": "clear && ng build --watch --configuration development",
-    "test": "clear && ng test --no-watch --code-coverage --browsers ChromeHeadless",
+    "build": "./build.sh.ps1",
+    "start": "./serve.sh.ps1",
+    "test": "./test.sh.ps1",
+    "watch": "./watch.sh.ps1",
     "serve:ssr:app": "node dist/app/server/server.mjs"
   },
   "private": true,

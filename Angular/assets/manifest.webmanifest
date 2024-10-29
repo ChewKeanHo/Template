@@ -1,32 +1,31 @@
 {
-  "name": "Brand Name",
-  "short_name": "brand",
+  "name": "Your Site-Level Website Name Here",
+  "short_name": "brand-name-here",
   "lang": "en",
-  "description": "description here",
+  "description": "Your site-level description here",
   "categories": [
-    "CAT 1",
-    "CAT 2",
-    "CAT 3"
+    "keyword 1",
+    "keyword 2"
   ],
-  "id": "#0000FF",
-  "theme_color": "#0000FF",
-  "background_color": "#021B79",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "display_override": [
     "standalone",
     "minimal-ui",
     "browser"
   ],
-  "scope": "./",
-  "start_url": "./",
   "orientation": "any",
-  "prefer_related_applications": false,
+  "theme_color": "#0000FF",
+  "background_color": "#021B79",
   "protocol_handlers": [
     {
       "protocol": "web+brand",
       "url": "/?query=%s"
     }
   ],
+  "prefer_related_applications": false,
   "related_applications": [
     {
       "id": "/",
@@ -36,140 +35,174 @@
   ],
   "screenshots": [
     {
-      "label": "Brand Name",
-      "platform": "wide",
+      "label": "Welcome",
+      "form_factor": "wide",
       "sizes": "1200x630",
-      "src": "/logos/icon_512x512.png",
+      "src": "https://www.example.com/screenshots/screenshot-welcome_1200x630.png",
+      "type": "image/png"
+    },
+    {
+      "label": "Welcome",
+      "form_factor": "narrow",
+      "sizes": "630x1200",
+      "src": "https://www.example.com/screenshots/screenshot-welcome_630x1200.png",
+      "type": "image/png"
+    },
+    {
+      "label": "Welcome",
+      "sizes": "1200x1200",
+      "src": "https://www.example.com/screenshots/screenshot-welcome_1200x1200.png",
       "type": "image/png"
     }
   ],
   "shortcuts": [
     {
-      "description": "To Main Dashboard",
+      "description": "Dashboard",
       "icons": [
         {
           "purpose": "any",
           "sizes": "1200x1200",
-          "src": "/logos/icon_1200x1200.png",
+          "src": "https://www.example.com/logos/icon_1200x1200.png",
           "type": "image/png"
         }
       ],
-      "name": "Home \\u0026 Dashboard",
+      "name": "Dashboard",
       "short_name": "Dashboard",
       "url": "/"
     }
   ],
   "icons": [
     {
-      "src": "/logos/icon_57x57.png",
+      "src": "https://www.example.com/logos/icon_57x57.png",
       "sizes": "57x57",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_60x60.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_60x60.png",
       "sizes": "60x60",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_70x70.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_70x70.png",
       "sizes": "70x70",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_72x72.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_72x72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_76x76.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_76x76.png",
       "sizes": "76x76",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_96x96.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_96x96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_114x114.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_114x114.png",
       "sizes": "114x114",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_120x120.png",
-      "sizes": "96x96",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_120x120.png",
+      "sizes": "120x120",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_128x128.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_128x128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_144x144.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_144x144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_150x150.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_150x150.png",
       "sizes": "150x150",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_152x152.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_152x152.png",
       "sizes": "152x152",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_180x180.png",
-      "sizes": "152x152",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_180x180.png",
+      "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_192x192.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_310x310.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_310x310.png",
       "sizes": "310x310",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_384x384.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_384x384.png",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_480x480.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_480x480.png",
       "sizes": "480x480",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_512x512.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_1024x1024.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_1024x1024.png",
       "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_1200x1200.svg",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_1200x1200.svg",
       "sizes": "1200x1200",
       "type": "image/svg+xml",
       "purpose": "any"
-    }, {
-      "src": "/logos/icon_1200x1200.png",
+    },
+    {
+      "src": "https://www.example.com/logos/icon_1200x1200.png",
       "sizes": "1200x1200",
       "type": "image/png",
       "purpose": "any"
-    }, {
-      "purpose": "maskable any",
+    },
+    {
+      "src": "https://www.example.com/logos/icon-monochrome_1200x1200.svg",
       "sizes": "1200x1200",
-      "src": "/logos/icon-monochrome_1200x1200.svg",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     }
   ]
 }

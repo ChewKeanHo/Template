@@ -1,5 +1,6 @@
 # Copyright 2023 (Holloway) Chew, Kean Ho <hollowaykeanho@gmail.com>
 #
+#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License. You may obtain a copy
 # of the License at:
@@ -51,7 +52,7 @@ if ($(OS-Is-Run-Simulated) -eq 0) {
 	}
 	$env:CHROME_BIN = $___browser
 
-	$___process = ANGULAR-Test
+	$___process = OS-Exec "./test.sh.ps1"
 	if ($___process -ne 0) {
 		$null = I18N-Run-Failed
 		return 1
