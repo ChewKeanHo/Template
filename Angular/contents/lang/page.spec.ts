@@ -9,9 +9,9 @@ import { Page_Lang } from './page';
 
 describe('Page_Lang', () => {
 	beforeEach(async () => {
-	await TestBed.configureTestingModule({
-		imports: [Page_Lang],
-	}).compileComponents();
+		await TestBed.configureTestingModule({
+			imports: [Page_Lang],
+		}).compileComponents();
 	});
 
 

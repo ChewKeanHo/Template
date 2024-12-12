@@ -9,9 +9,9 @@ import { Page_404 } from './page';
 
 describe('Page_404', () => {
 	beforeEach(async () => {
-	await TestBed.configureTestingModule({
-		imports: [Page_404],
-	}).compileComponents();
+		await TestBed.configureTestingModule({
+			imports: [Page_404],
+		}).compileComponents();
 	});
 
 	it('should create the app', () => {

@@ -5,8 +5,8 @@
 	<title>TITLE</title>
 	<base href="/">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<meta name="description" content="DESCRIPTION" />
-	<meta name="keywords" content="KEYWORDS" />
+	<meta name="description" content="URL redirector from the origin domain." />
+	<meta name="keywords" content="redirector, link, goto, website" />
 
 	<!-- ld+json -->
 	<script type="application/ld+json"></script>
@@ -14,13 +14,13 @@
 	<!-- PWA -->
 	<link rel="icon" type="image/x-icon" href="/logos/icon.ico" />
 	<link rel="manifest" href="/manifest.webmanifest" />
-	<meta name="theme-color" content="#0000FF" />
-	<meta name="msapplication-TileColor" content="#021B79" />
+	<meta name="theme-color" content="#FFFF00" />
+	<meta name="msapplication-TileColor" content="#000428" />
 	<meta name="msapplication-config" content="/browserconfig.xml" />
 	<link rel='mask-icon'
 		type='image/svg+xml'
 		href='/logos/icon-monochrome_1200x1200.svg'
-		color='#0000FF' />
+		color='#FFFF00' />
 
 	<!-- favicon 57x57 -->
 	<link rel='icon' type='image/png' sizes='57x57' href='/logos/icon_57x57.png' />
@@ -122,9 +122,9 @@
 
 	<!-- open-graph -->
 	<meta property="og:title" content="TITLE" />
-	<meta property="og:site_name" content="SITE_NAME" />
-	<meta property="og:locale" content="LANG" />
-	<meta property="og:description" content="DESCRIPTION" />
+	<meta property="og:site_name" content="SITE NAME" />
+	<meta property="og:locale" content="en" />
+	<meta property="og:description" content="SITE PITCH" />
 	<meta property="og:url" content="/" />
 
 	<!-- open-graph thumbnail (wide) -->
@@ -149,7 +149,12 @@
 	<!-- engine takesover here -->
 </head>
 <body>
-	<app-root></app-root>
-	<noscript>Please enable JavaScript to continue using this application.</noscript>
+	<main>
+		<app-root></app-root>
+		<div><noscript>
+			<p>Please enable JavaScript to continue using this application.</p>
+		</noscript></div>
+	</main>
+	<footer><app-footer></app-footer></footer>
 </body>
 </html>

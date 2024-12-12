@@ -1,28 +1,11 @@
 /*
  * COPYRIGHT LICENSE NOTICE HERE
  */
-import { Get_Base_URL, Yield_URL } from './init.metadata';
+import { METADATA_SITE } from '../app/metadata';
+import { Get_Base_URL, Yield_URL } from './url';
 import * as fs from 'fs';
 import * as path from 'path';
 
-
-
-
-// add your url here
-const url_add: string[] = [
-];
-
-// remove your url here
-const url_remove: string[] = [
-	'/404',
-];
-
-// robots.txt policy here
-// NOTICE: DO NOT add 'Sitemap:'. It will be added automatically when available.
-const robots_policy = `
-User-agent: *
-Allow: /
-`
 
 
 
@@ -183,7 +166,7 @@ function create_robots(filepath: string, sitemap_url: string) {
 	}
 
 	// append the policy
-	fs.appendFileSync(filepath, robots_policy);
+	fs.appendFileSync(filepath, METADATA_SITE.SEO.Robot);
 }
 
 
@@ -243,9 +226,9 @@ export function Create_SEO() {
 	}
 
 
-	/* add urls from url_add */
-	for (var i = 0; i < url_add.length; i++) {
-		if (!url_add[i]) {
+	/* add urls from METADATA_SITE.SEO.Add */
+	for (var i = 0; i < METADATA_SITE.SEO.Add.length; i++) {
+		if (!METADATA_SITE.SEO.Add[i]) {
 			continue
 		}
 
@@ -257,13 +240,13 @@ export function Create_SEO() {
 	list.filter((x, i, a) => a.indexOf(x) == i);
 
 
-	/* remove urls from url_remove */
-	for (var i = 0; i < url_remove.length; i++) {
-		if (!url_remove[i]) {
+	/* remove urls from METADATA_SITE.SEO.Remove */
+	for (var i = 0; i < METADATA_SITE.SEO.Remove.length; i++) {
+		if (!METADATA_SITE.SEO.Remove[i]) {
 			continue
 		}
 
-		let target = Yield_URL(url_remove[i], base);
+		let target = Yield_URL(METADATA_SITE.SEO.Remove[i], base);
 		list = list.filter((sample) => sample != target);
 	}
 

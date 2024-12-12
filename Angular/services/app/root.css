@@ -1,0 +1,4 @@
+body {
+	/* define all your font family here */
+	font-family: var(--font-family-web-safe-sans-serif);
+}

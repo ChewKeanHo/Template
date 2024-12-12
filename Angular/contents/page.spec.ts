@@ -9,9 +9,9 @@ import { Page_Root } from './page';
 
 describe('Page_Root', () => {
 	beforeEach(async () => {
-	await TestBed.configureTestingModule({
-		imports: [Page_Root],
-	}).compileComponents();
+		await TestBed.configureTestingModule({
+			imports: [Page_Root],
+		}).compileComponents();
 	});
 
 	it('should create the app', () => {

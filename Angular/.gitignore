@@ -1,0 +1,40 @@
+################################################################################
+# Project-Specific and User-Defined Files & Directories                        #
+# (1) Specify your project specific files and directories here. You should     #
+#     only touch this section.                                                 #
+################################################################################
+
+
+
+
+################################################################################
+# AutomataCI - Angular                                                         #
+# (1) These are auto-generated asset files. Leave them as it is in order to    #
+#     maintain good and proper performance.                                    #
+################################################################################
+assets/.nojekyll
+assets/CNAME
+assets/browserconfig.xml
+assets/manifest.webmanifest
+assets/robots.txt
+assets/sitemap.xml
+assets/sitemaps/
+
+
+
+
+################################################################################
+# Angular & Node                                                               #
+# (1) These are Angular and Node disposable files. Leave them as it is in      #
+#     order to maintain good and proper performance.                           #
+################################################################################
+out-tsc
+bazel-out
+cache/
+coverage/
+dist/
+.sass-cache/
+connect.lock
+libpeerconnection.log
+testem.log
+typings

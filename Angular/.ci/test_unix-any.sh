@@ -45,13 +45,25 @@ if [ $(OS_Is_Run_Simulated) -eq 0 ]; then
         I18N_Simulate_Testing
         return 0
 else
-        ___browser="$(type -p google-chrome)"
-        if [ $(STRINGS_Is_Empty "$___browser") -eq 0 ]; then
+        ___old_IFS="$IFS"
+        while IFS="" read -r ___line || [ -n "$___line" ]; do
+                ___browser="$(type -p chromium)"
+                if [ ! -z "$___browser" ]; then
+                        break
+                fi
+        done << EOF
+chromium
+google-chrome
+brave-browser
+EOF
+        IFS="$___old_IFS" && unset ___old_IFS ___line
+
+        if [ "$___browser" = "" ]; then
                 I18N_Run_Failed
                 return 1
         fi
 
-        CHROME_BIN="${___browser}" ./test.sh.ps1
+        CHROME_BIN="$___browser" ./test.sh.ps1
         if [ $? -ne 0 ]; then
                 I18N_Run_Failed
                 return 1

@@ -1,13 +1,9 @@
 /*
  * COPYRIGHT LICENSE NOTICE HERE
  */
-import { Get_Base_URL, METADATA_SITE } from './init.metadata';
+import { METADATA_SITE } from '../app/metadata';
+import { Get_Base_URL } from './url';
 import * as fs from 'fs';
-
-
-
-
-const data = ''; // override the content here
 
 
 
@@ -16,6 +12,12 @@ const data = ''; // override the content here
 export function Create_CNAME() {
 	const dir_build = 'assets';
 	const filepath = dir_build + '/' + 'CNAME';
+
+
+	/* check for requirement */
+	if (!METADATA_SITE.ID_CNAME) {
+		return;
+	}
 
 
 	/* bail if file exists */
@@ -35,9 +37,7 @@ export function Create_CNAME() {
 
 
 	/* create new file */
-	if (data) {
-		fs.writeFileSync(filepath, data);
-	}
+	fs.writeFileSync(filepath, METADATA_SITE.ID_CNAME);
 
 
 	/* report status */

@@ -33,12 +33,6 @@ $null = Remove-Item -Force ".\assets\sitemap.xml" -ErrorAction SilentlyContinue
 $null = Remove-Item -Force ".\assets\robots.txt" -ErrorAction SilentlyContinue
 $null = Remove-Item -Force ".\assets\browserconfig.xml" -ErrorAction SilentlyContinue
 $null = Remove-Item -Force ".\assets\.nojekyll" -ErrorAction SilentlyContinue
-
-
-$null = Write-Host "initializing the repository..."
-$null = ng build --aot --configuration production | Out-Null
-$null = Remove-Item -Recurse -Force ".\dist" -ErrorAction SilentlyContinue
-$null = [System.IO.File]::FlushAll()
 return
 ################################################################################
 # Windows POWERSHELL Codes                                                     #
@@ -62,12 +56,6 @@ rm "./assets/sitemap.xml" &> /dev/null
 rm "./assets/robots.txt" &> /dev/null
 rm "./assets/browserconfig.xml" &> /dev/null
 rm "./assets/.nojekyll" &> /dev/null
-
-
-1>&2 printf -- "%s\n" "initializing the repository..."
-ng build --aot --configuration production --server main.server.ts &> /dev/null
-rm -rf "./dist/" &> /dev/null
-sync
 return 0
 ################################################################################
 # Unix Main Codes                                                              #

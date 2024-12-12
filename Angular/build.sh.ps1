@@ -26,8 +26,11 @@ echo \" <<'RUN_AS_POWERSHELL' >/dev/null # " | Out-Null
 ################################################################################
 # execute
 $null = . ".\init.sh.ps1"
-$null = Clear-Host
-$null = ng build --configuration production
+$null = Write-Host "initializing the repository..."
+$null = ng build --aot --configuration production --server main.server.ts | Out-Null
+$null = Remove-Item -Recurse -Force ".\dist" -ErrorAction SilentlyContinue
+$null = [System.IO.File]::FlushAll()
+$null = ng build --aot --configuration production
 ################################################################################
 # Windows POWERSHELL Codes                                                     #
 ################################################################################
@@ -43,8 +46,11 @@ RUN_AS_POWERSHELL
 ################################################################################
 # execute
 . "./init.sh.ps1"
-clear
-ng build --configuration production
+1>&2 printf -- "%s\n" "initializing the repository..."
+ng build --aot --configuration production --server main.server.ts &> /dev/null
+rm -rf "./dist/" &> /dev/null
+sync
+ng build --aot --configuration production
 ################################################################################
 # Unix Main Codes                                                              #
 ################################################################################

@@ -21,7 +21,7 @@ export const routes: Routes = [
 	},
 
 
-	// main page by language
+	// main page
 	{
 		path: 'en',
 		component: Page_Lang,

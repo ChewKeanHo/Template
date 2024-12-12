@@ -9,7 +9,6 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
 	selector: 'page-root',
-	standalone: true,
 	imports: [RouterOutlet],
 	templateUrl: './page.html',
 	styleUrl: './page.css'

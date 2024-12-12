@@ -19,7 +19,7 @@
               "browser": "browser",
               "server": "server"
             },
-            "index": "app.html",
+            "index": "services/app/root.html",
             "polyfills": [
               "zone.js"
             ],
@@ -30,10 +30,12 @@
               "output": "."
             }],
             "styles": [
-              "app.css"
+              "services/app/root.css",
+              "services/app/footer.css"
             ],
             "scripts": [
-              "app.js"
+              "services/app/root.js",
+              "services/app/footer.js"
             ],
             "browser": "main.ts",
             "server": "main.server.ts",
@@ -105,10 +107,12 @@
               "output": "."
             }],
             "styles": [
-              "app.css"
+              "services/app/root.css",
+              "services/app/footer.css"
             ],
             "scripts": [
-              "app.js"
+              "services/app/root.js",
+              "services/app/footer.js"
             ]
           }
         }

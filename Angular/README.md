@@ -1,8 +1,7 @@
-# AutomataCI Static Site Generator Angular Setup
+# AutomataCI - Angular Static Site Generator
 
-This document is mainly for the project developers including junior role to
-understand what is going on in the workspace and how to operate it.
-Most of the Angular resources should be the same.
+This document for the project developers including junior experiences. It covers
+the basic guides for operating the generator.
 
 
 
@@ -12,22 +11,19 @@ Most of the Angular resources should be the same.
 Unlike what was recommended by Angular, AutomataCI prepared 2 clearly separated
 components directories:
 
-1. `contents/` - organize the pages
-2. `services/` - where your libraries and components stays
-3. `assets/` - any static files located at the root of the site.
+1. `contents/` - organize page components with respect to pathing hirarchy.
+2. `services/` - where your libraries and service components stays.
+3. `services/app/` - where `app-root` and `app-footer` components are located.
+4. `services/init/` - where your project init components are located.
+5. `assets/` - any static files located at the root of the site.
 
-The root directory is programmed to be here, where all the `app.*.ts` and
-`main.*.ts` are located.
+The root directory for the workspace is where both `app.ts` and `app.server.ts`
+are located.
 
-The `contents/` component directory structures the website page hirarchy.
-Each page imports component libraries from the `services/` directory for
-constructing its content. All components in both directories are both using
-Angular Components to operate seamlessly.
-
-For internationalization (i18n), it is best to keep it as service libraries
-while retaining the `contents/` directory as the page rendering template. You
-can pass the language code using the `app.routes.ts` routing mechanism and
-have them rendered accordingly.
+For internationalization (i18n), it is best to keep it as a service component
+libraries while keeping the `contents/` directory as the page template. You can
+pass the language code using the `app.routes.ts` routing mechanism and have
+them rendered accordingly.
 
 To avoid path conflicts, you should always check the `assets/` availability
 before creating the content inside `content/` directory.
@@ -47,24 +43,25 @@ Due to Angular's limitation (dating Angular 18), You are **strongly advised**
 to use the prepared Polygot shell for commands:
 
 ```
-$ cd workspace/     # get into your Angular workspace as current directory
+# (1) get into your Angular workspace as current directory
+$ cd Angular/
 
-$ # run any of the following matching your intention:
+
+# (2) run any of the following matching your intention:
 $ ./serve.sh.ps1    # for development
 $ ./test.sh.ps1     # for test run
 $ ./build.sh.ps1    # for build
 ```
 
 This is mainly due to Angular does not have any pre-initialization function
-that can setup the workspace's critical data files dynamically
-(example: `assets/manifest.webmanifest`, `assets/CNAME`, and etc) before the
-actual start-up. To workaround this challenge, a 2-steps execution is done
-inside these scripts where the `init.sh.ps1` (sourced by others) is
-responsible for building and updating these critical data files using the
-Angular server-side-rendering capability.
+where the workspace's critical data files can be updated dynamically
+(example: `assets/manifest.webmanifest`, `assets/CNAME`, and etc). To workaround
+this, a 2-steps execution is done inside these scripts where the `init.sh.ps1`
+(sourced by the all shell scripts) is responsible for building and updating
+these critical data files using the server-side-rendering.
 
-These are Polygot scripts which means it should work for both UNIX and Windows
-operating system natively.
+Those are Polygot scripts which means it works on both UNIX and Windows OSes
+natively.
 
 
 
@@ -73,15 +70,15 @@ operating system natively.
 
 AutomataCI prioritizes the SSR and SSG (pre-rendering) facilities over other
 modes. There is a high chance this project is likely being used to generate
-JAM stack static website.
+front-end JAM stack static website.
 
 
 
 
 ## Setting website Base URL
 
-To set the Base URL, make sure you update the `baseHref` and `deployUrl` data
-inside the `angular.json` as follows:
+To set the base URL, update the `baseHref` and `deployUrl` data inside the
+`angular.json` data file as follows:
 
 ```
 {
@@ -103,73 +100,41 @@ inside the `angular.json` as follows:
 }
 ```
 
-`baseHref` is for the website base URL while `deployUrl` is for the asset-only
-base URL.
+`baseHref` is used as the website base URL while `deployUrl` is for the
+asset-only base URL.
 
-**DO NOT PASS ANY OF THEM IN VIA ARGUMENTS**. The workspace initialization is
-sourced `angular.json` only. Failure can cause unknown and time-consuming
-concequences.
-
-
-
-
-## PWA Web Manifest & CNAME
-
-By default, AutomataCI prepared the workspace to generate their critical data
-files dynamically using the 2-steps operational workaround.
-
-To modify them, look for these generator files and modify accordingly:
-
-* `init.pwa.ts` - for generating `assets/manifest.webmanifest` file.
-* `init.cname.ts` - for generating the `assets/CNAME` file.
+**DO NOT SEND IN ANY OF THEM VIA COMMAND ARGUMENTS**. The workspace
+initialization is only sourcing from `angular.json` data file. Failure can
+cause unknown and time-consuming concequences.
 
 
 
 
 ## Site-Level Metadata
 
-By default, AutomataCI prepared a site-level metadata file for default values
-rendering purposes located at:
-
-* `init.metadata.ts` - a constant object holding the site-level data.
-
-This affects a lot of built-in facilities like `assets/manifest.webmanifest` and
-page rendering.
+You just need to edit `services/app/metadata.ts` data file that houses the
+site-level metadata. Each fields are documented with inline specifications.
 
 
 
 
-## Site Logos & Favicons
+## PWA Web Manifest
 
-This workspace comes with a default placement for logos & favicons
-pre-programmed located at `assets/logos/` directory. Updating all the graphic
-files will update the project entirely.
-
-These logos are reusable outside of favicon usage especially those `.svg`
-format.
-
-To add/remove a logo, look for:
-
-1. `init.pwa.ts` web manifest generator.
-2. `app.html` head section.
+By default, the workspace engine prepares and generates the
+`manifest.webmanifest` file dynamically via the 2-steps operation using the
+`services/app/metadata.ts` data.
 
 
 
 
-## Update Screenshots
+## Site Favicons, Logos, and Screenshots
 
-Baseline PWA requires 3 basic screenshots located inside `assets/screenshots/`
-for:
+This workspace defines the favicons, logos, and screenshots metadata in the
+`services/app/metadata.ts` data file ("Icons" section). You can supply the
+media files in the `assets/` directory.
 
-* `wide` form factor (recommended `1200x630` size)
-* `narrow` form factor (recommended `630x1200` size)
-* any form factor (recommended `1200x1200` size)
-
-To add/remove a logo, look for `init.pwa.ts` web manifest generator. For more
-technical specifications, please refer to the following:
-
-1. https://web.dev/articles/add-manifest
-2. https://developer.mozilla.org/en-US/docs/Web/Manifest/screenshots
+The default media files are located in `assets/logos/` directory. On the
+first run, you can just update these media files to match your project.
 
 
 
@@ -180,7 +145,7 @@ By default, AutomataCI setup the default image thumbnails located inside the
 `assets/thumbnails/` directory. These images serve as the fall back images
 in case the page-level ones failed.
 
-By practice, these Open-Graph metadata must be updated at page-level.
+In practice, these Open-Graph metadata must be updated at page-level.
 
 Recommended media dimension would be:
 
@@ -188,7 +153,8 @@ Recommended media dimension would be:
 2. `1200x1200` - square presentation
 3. `480x480` - fallback presentation
 
-You are free to alter the thumbnails located in `app.html` head section.
+You are free to alter the thumbnails located in `services/app/root.html` head
+section.
 
 For image, please use:
 
@@ -226,7 +192,8 @@ For more technical specification, please refer to the following:
 
 ## LD+JSON Search Engine Optimization Schematic Data
 
-By default, AutomataCI only setup the default empty tag in the `app.html`.
+By default, AutomataCI only setup the default empty tag in the
+`services/app/root.html`.
 
 These LD+JSON SEO schematic data must be updated at the page-level rendering.
 For more technical specifications, please refer to the following:
@@ -236,63 +203,36 @@ For more technical specifications, please refer to the following:
 
 
 
-## Sitemaps & `Robots.txt` Search Engine Optimization Configurations
+## Sitemaps & `Robots.txt` Search Engine Optimization (SEO)
 
-By default, AutomataCI generates the following automatically:
+By default, the engine generates both the sitemaps and the `robots.txt`
+autonomously using the `services/app/metadata.ts` data file via the 2-steps
+operation.
 
-* 1 index sitemap (`assets/sitemap.xml`)
-* all the pages' sitemap inside `assets/sitemaps/` directory
-* 1 robot text file (`assets/robots.txt`)
-
-The sitemaps are complying to the 50,000 entries limit.
-
-This is done by:
-
-1. parsing the `prerender-routes.txt` url list
-2. add from `url_add` specific url list
-3. remove from `url_remove` specific url list
-
-To add/remove urls or modify the `robots.txt` policy:
-
-* `init.sitemaps.ts` - the generator script.
-
-Look for:
-
-1. `url_add` - add additional URLs after `prerender-routes.txt`
-2. `url_remove` - remove URLs right before writing.
-3. `robots_policy` - the `robots.txt` without the `Sitemap: ` field (added
-   automatically whenever available).
+The engine is designed to utilize sitemap index for large scale contents.
 
 
 
 
 ## `browserconfig.xml` fallback configuration
 
-While deemed obselete, this file is generated for backward compatibilities and
-silencing those automated requests. AutomataCI automatically generate this
-config file into `assets/browserconfig.xml` based on the site-level metadata
-information.
+While deemed obselete, this file is generated autonomously for backward
+compatibilities and request silencing via the 2-steps operation.
 
 
 
 
 ## `.nojekyll` configuration file
 
-Specific to GitHub, it is required to generate this configuration file for
-static site generator not using [Jekyll](https://jekyllrb.com/).
+Specific to GitHub Pages, the engine generates the `assets/.nojekyll`
+configuration file for instructing the facility not to use
+[Jekyll](https://jekyllrb.com/) via the 2-steps operation.
 
 
 
 
 ## `CNAME` configuration file
 
-Specific to GitHub, AutomataCI generates the `assets/CNAME` configuration file
-as requested for custom domain implementations. By default, this file is not
-generated and will be hosted on GitHub Pages.
-
-To set the domain, please refer to:
-
-* `init.cname.ts` - generator file
-
-Look for `const data = ''; // override the content here` and specify the domain
-value into it.
+Specific to GitHub Pages, the engine generates the `assets/CNAME` config
+file based on the `services/app/metadata.ts` data file. This is used by
+GitHub Pages to implement custom domain configurations.

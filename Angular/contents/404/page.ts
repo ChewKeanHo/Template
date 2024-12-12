@@ -9,7 +9,6 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
 	selector: 'page-404',
-	standalone: true,
 	imports: [RouterOutlet],
 	templateUrl: './page.html',
 	styleUrl: './page.css'

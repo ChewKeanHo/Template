@@ -1,7 +1,8 @@
 /*
  * COPYRIGHT LICENSE NOTICE HERE
  */
-import { Get_Base_URL, METADATA_SITE, Yield_URL } from './init.metadata';
+import { METADATA_SITE } from '../app/metadata';
+import { Get_Base_URL, Yield_URL } from './url';
 import * as fs from 'fs';
 
 
@@ -40,7 +41,7 @@ export function Create_Browser_Config_XML() {
 			<wide310x150logo src="${Yield_URL("/logos/icon_310x150.png", data)}" />
 			<square310x310logo src="${Yield_URL("/logos/icon_310x310.png", data)}" />
 			<square70x70logo src="${Yield_URL("/logos/icon_70x70.png", data)}" />
-			<TileColor>${METADATA_SITE.Color_Theme_Background}</TileColor>
+			<TileColor>${METADATA_SITE.Color_Theme_Background || '#021B79'}</TileColor>
 		</tile>
 	</msapplication>
 </browserconfig>
