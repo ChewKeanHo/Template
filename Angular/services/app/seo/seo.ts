@@ -1,10 +1,10 @@
 /*
  * COPYRIGHT LICENSE NOTICE HERE
  */
-import { METADATA_SITE } from '../app/metadata';
-import { Get_Base_URL, Yield_URL } from './url';
 import * as fs from 'fs';
 import * as path from 'path';
+
+import { SEO, Yield_URL } from 'services/app/Definitions';
 
 
 
@@ -159,30 +159,34 @@ function create_sitemaps_index(filepath: string, list: string[]) {
 
 
 
-function create_robots(filepath: string, sitemap_url: string) {
+function create_robots(filepath: string, sitemap_url: string, seo: SEO) {
 	// write sitemap if available
 	if (sitemap_url) {
 		fs.appendFileSync(filepath, `Sitemap: ${sitemap_url}`);
 	}
 
 	// append the policy
-	fs.appendFileSync(filepath, METADATA_SITE.SEO.Robot);
+	fs.appendFileSync(filepath, seo.Robot);
 }
 
 
 
 
 /* exported function for creating the seo configuration files */
-export function Create_SEO() {
-	const source_file = 'prerender-routes.txt';
+export function Create_SEO(
+	path_build: string,
+	url_base: string,
+	source_file: string,
+	seo: SEO,
+) {
 	const filename_sitemap = 'sitemap.xml';
 	const filename_robots = 'robots.txt';
 
 	const dir_sitemaps = 'sitemaps';
-	const dir_sitemaps_build = `assets/${dir_sitemaps}`;
+	const dir_sitemaps_build = `${path_build}/${dir_sitemaps}`;
 
-	const filepath_sitemap = `assets/${filename_sitemap}`;
-	const filepath_robots = `assets/${filename_robots}`;
+	const filepath_sitemap = `${path_build}/${filename_sitemap}`;
+	const filepath_robots = `${path_build}/${filename_robots}`;
 
 
 	/* bail if source file is missing */
@@ -214,7 +218,6 @@ export function Create_SEO() {
 
 
 	/* parse urls from prerender-routes.txt */
-	var base = Get_Base_URL();
 	var sources = fs.readFileSync(source_file).toString().split("\n");
 	var list: string[] = [];
 	for (var i = 0; i < sources.length; i++) {
@@ -222,17 +225,17 @@ export function Create_SEO() {
 			continue
 		}
 
-		list[i] = Yield_URL(sources[i], base);
+		list[i] = Yield_URL(sources[i], url_base);
 	}
 
 
-	/* add urls from METADATA_SITE.SEO.Add */
-	for (var i = 0; i < METADATA_SITE.SEO.Add.length; i++) {
-		if (!METADATA_SITE.SEO.Add[i]) {
+	/* add urls from METADATA_SITE.SEO.Add list */
+	for (var i = 0; i < seo.Add.length; i++) {
+		if (!seo.Add[i]) {
 			continue
 		}
 
-		list.push(Yield_URL(sources[i], base));
+		list.push(Yield_URL(sources[i], url_base));
 	}
 
 
@@ -240,27 +243,26 @@ export function Create_SEO() {
 	list.filter((x, i, a) => a.indexOf(x) == i);
 
 
-	/* remove urls from METADATA_SITE.SEO.Remove */
-	for (var i = 0; i < METADATA_SITE.SEO.Remove.length; i++) {
-		if (!METADATA_SITE.SEO.Remove[i]) {
+	/* remove urls from METADATA_SITE.SEO.Remove list */
+	for (var i = 0; i < seo.Remove.length; i++) {
+		if (!seo.Remove[i]) {
 			continue
 		}
 
-		let target = Yield_URL(METADATA_SITE.SEO.Remove[i], base);
+		let target = Yield_URL(seo.Remove[i], url_base);
 		list = list.filter((sample) => sample != target);
 	}
 
 
 	/* validate list before proceeding */
 	if (list.length <= 0) {
-		create_robots(filepath_robots, '');
+		create_robots(filepath_robots, '', seo);
 		return; /* no url - bail */
 	}
 
 
 	/* update sitemap baseline url */
-	let url_sitemap = Yield_URL(filename_sitemap, base);
-	base = Yield_URL(`/${dir_sitemaps}`, base);
+	let url_sitemap = Yield_URL(filename_sitemap, url_base);
 
 
 	/* create directory */
@@ -270,7 +272,11 @@ export function Create_SEO() {
 
 
 	/* create page sitemaps */
-	var sitemaps = create_sitemaps_page(dir_sitemaps_build, base, list);
+	var sitemaps = create_sitemaps_page(
+		dir_sitemaps_build,
+		Yield_URL(`/${dir_sitemaps}`, url_base),
+		list,
+	);
 
 
 	/* create index sitemaps */
@@ -278,7 +284,7 @@ export function Create_SEO() {
 
 
 	/* create robots.txt */
-	create_robots(filepath_robots, url_sitemap);
+	create_robots(filepath_robots, url_sitemap, seo);
 
 
 	/* report status */

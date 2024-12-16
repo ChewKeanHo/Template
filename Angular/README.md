@@ -13,17 +13,17 @@ components directories:
 
 1. `contents/` - organize page components with respect to pathing hirarchy.
 2. `services/` - where your libraries and service components stays.
-3. `services/app/` - where `app-root` and `app-footer` components are located.
-4. `services/init/` - where your project init components are located.
+3. `services/app/` - where `app-root`, `app-footer`, and `Init.ts` components
+    are located.
 5. `assets/` - any static files located at the root of the site.
 
-The root directory for the workspace is where both `app.ts` and `app.server.ts`
-are located.
+The root directory for the workspace is where both `main.ts` and
+`main.server.ts` are located.
 
 For internationalization (i18n), it is best to keep it as a service component
 libraries while keeping the `contents/` directory as the page template. You can
-pass the language code using the `app.routes.ts` routing mechanism and have
-them rendered accordingly.
+definite and pass the language code using the `app.routes.ts` routing mechanism.
+Then, the page components can render the specific language accordingly.
 
 To avoid path conflicts, you should always check the `assets/` availability
 before creating the content inside `content/` directory.
@@ -51,22 +51,33 @@ $ cd Angular/
 $ ./serve.sh.ps1    # for development
 $ ./test.sh.ps1     # for test run
 $ ./build.sh.ps1    # for build
+$ ./watch.sh.ps1    # for watch
 ```
 
 This is mainly due to Angular does not have any pre-initialization function
-where the workspace's critical data files can be updated dynamically
-(example: `assets/manifest.webmanifest`, `assets/CNAME`, and etc). To workaround
-this, a 2-steps execution is done inside these scripts where the `init.sh.ps1`
-(sourced by the all shell scripts) is responsible for building and updating
-these critical data files using the server-side-rendering.
+to update critical SEO files generations autonomously & dynamically. Affected
+files are:
 
-Those are Polygot scripts which means it works on both UNIX and Windows OSes
-natively.
+* `assets/browserconfig.xml`
+* `assets/CNAME`
+* `assets/.nojekyll`
+* `assets/sitemap.xml`
+* `assets/robots.txt`
+* `assets/manifest.webmanifest`
+* `services/app/root.html`
+
+This includes the `index.html` (`services/app/root.html`) that `angular.json`
+depends on. To workaround this issue, a 2-steps execution is done using the
+Shell (and PowerShell on Windows) scripts where Stage-1 is to prepare these
+criticaly files dynamically while Stage-2 is your designated execution.
+
+Those shell scripts are Polygot in nature so the same script works on both
+UNIX and Windows OSes natively.
 
 
 
 
-## Server-Side Rendering (SSR) or Static Site Generation (SSG) First
+## Server-Side Rendering (SSR) or Static Site Generation (SSG) Enabled
 
 AutomataCI prioritizes the SSR and SSG (pre-rendering) facilities over other
 modes. There is a high chance this project is likely being used to generate
@@ -103,17 +114,19 @@ To set the base URL, update the `baseHref` and `deployUrl` data inside the
 `baseHref` is used as the website base URL while `deployUrl` is for the
 asset-only base URL.
 
-**DO NOT SEND IN ANY OF THEM VIA COMMAND ARGUMENTS**. The workspace
-initialization is only sourcing from `angular.json` data file. Failure can
-cause unknown and time-consuming concequences.
+> **DO NOT SEND IN ANY OF THEM VIA COMMAND ARGUMENTS**
+>
+> The workspace initialization is only sourcing from `angular.json` data file.
+> Failure can cause unknown and time-consuming concequences.
 
 
 
 
 ## Site-Level Metadata
 
-You just need to edit `services/app/metadata.ts` data file that houses the
-site-level metadata. Each fields are documented with inline specifications.
+You just need to edit `services/app/Metadata.ts` data file that houses the
+site-level metadata. Each fields are documented with its inline
+specifications.
 
 
 
@@ -121,8 +134,9 @@ site-level metadata. Each fields are documented with inline specifications.
 ## PWA Web Manifest
 
 By default, the workspace engine prepares and generates the
-`manifest.webmanifest` file dynamically via the 2-steps operation using the
-`services/app/metadata.ts` data.
+`assets/manifest.webmanifest` file dynamically in the Stage-1 execution.
+
+It generally uses `services/app/Metadata.ts` data for dynamic configurations.
 
 
 
@@ -130,11 +144,12 @@ By default, the workspace engine prepares and generates the
 ## Site Favicons, Logos, and Screenshots
 
 This workspace defines the favicons, logos, and screenshots metadata in the
-`services/app/metadata.ts` data file ("Icons" section). You can supply the
-media files in the `assets/` directory.
+`services/app/Metadata.ts` data file. You can supply the media files in the
+`assets/` directory (e.g. `assets/screenshots/`, `assets/thumbnails/`,
+`assets/logos/`).
 
-The default media files are located in `assets/logos/` directory. On the
-first run, you can just update these media files to match your project.
+If you just want to dive in with site construction, simply override the
+existing template files in the `assets/` directory is suffice.
 
 
 
@@ -143,9 +158,15 @@ first run, you can just update these media files to match your project.
 
 By default, AutomataCI setup the default image thumbnails located inside the
 `assets/thumbnails/` directory. These images serve as the fall back images
-in case the page-level ones failed.
+in case the page-level ones failed. These default thumbnails are configurable
+in the `services/app/Metadata.ts` file.
 
-In practice, these Open-Graph metadata must be updated at page-level.
+The `services/app/root.html` (main template file) is dynamically generated
+in Stage-1 execution with the site-level thumbnails meta included.
+
+Currently, Angular updates the meta tags dynamically using `Meta` and `Title`
+services from `@angular/platform-browser` library. There is no way to statically
+generate/patch the output `index.html` file yet.
 
 Recommended media dimension would be:
 
@@ -153,45 +174,15 @@ Recommended media dimension would be:
 2. `1200x1200` - square presentation
 3. `480x480` - fallback presentation
 
-You are free to alter the thumbnails located in `services/app/root.html` head
-section.
-
-For image, please use:
-
-```
-	<meta property="og:image" content="/path/to/asset.image" />
-	<meta property="og:image:type" content="image/FORMAT" />
-	<meta property="og:image:width" content="WIDTH" />
-	<meta property="og:image:height" content="HEIGHT" />
-	<meta property="og:image:alt" content="TITLE" />
-```
-
-For video, please use:
-
-```
-	<meta property="og:video" content="/path/to/asset.video" />
-	<meta property="og:video:type" content="video/FORMAT" />
-	<meta property="og:video:width" content="WIDTH" />
-	<meta property="og:video:height" content="HEIGHT" />
-	<meta property="og:video:alt" content="CAPTION" />
-```
-
-For audio, please use:
-
-```
-	<meta property="og:audio" content="/path/to/asset.audio" />
-	<meta property="og:audio:type" content="audio/FORMAT" />
-```
-
-For more technical specification, please refer to the following:
-
-1. https://ogp.me/
-
 
 
 
 ## LD+JSON Search Engine Optimization Schematic Data
 
+This feature is pending and under development.
+
+```
+SPEC:
 By default, AutomataCI only setup the default empty tag in the
 `services/app/root.html`.
 
@@ -200,16 +191,21 @@ For more technical specifications, please refer to the following:
 
 1. https://schema.org/docs/full.html
 
+For SEO, the default page **MUST** be the root page since Angular only
+pre-render the landing page HTML once and let its Javascript to take over
+the others.
+```
+
 
 
 
 ## Sitemaps & `Robots.txt` Search Engine Optimization (SEO)
 
-By default, the engine generates both the sitemaps and the `robots.txt`
-autonomously using the `services/app/metadata.ts` data file via the 2-steps
-operation.
+By default, the engine generates both the sitemaps (`assets/sitemap.xml` and
+the `assets/sitemaps/` directory) and the `assets/robots.txt` autonomously
+using the `services/app/Metadata.ts` data file via Stage-1 execution.
 
-The engine is designed to utilize sitemap index for large scale contents.
+It uses the sitemap index methodology for large scale contents mapping.
 
 
 
@@ -217,7 +213,8 @@ The engine is designed to utilize sitemap index for large scale contents.
 ## `browserconfig.xml` fallback configuration
 
 While deemed obselete, this file is generated autonomously for backward
-compatibilities and request silencing via the 2-steps operation.
+compatibilities and silencing the request using the `services/app/Metadata.ts`
+data file via Stage-1 execution.
 
 
 
@@ -226,7 +223,7 @@ compatibilities and request silencing via the 2-steps operation.
 
 Specific to GitHub Pages, the engine generates the `assets/.nojekyll`
 configuration file for instructing the facility not to use
-[Jekyll](https://jekyllrb.com/) via the 2-steps operation.
+[Jekyll](https://jekyllrb.com/) via Stage-1 execution.
 
 
 
@@ -234,5 +231,7 @@ configuration file for instructing the facility not to use
 ## `CNAME` configuration file
 
 Specific to GitHub Pages, the engine generates the `assets/CNAME` config
-file based on the `services/app/metadata.ts` data file. This is used by
-GitHub Pages to implement custom domain configurations.
+file based on the `services/app/Metadata.ts` data file via Stage-1 execution.
+
+This file is used by GitHub Pages to implement custom domain configurations
+persistently.

@@ -7,9 +7,8 @@ import * as fs from 'fs';
 
 
 /* exported function for creating the .nojekyll file */
-export function Create_No_Jekyll() {
-	const dir_build = 'assets';
-	const filepath = dir_build + '/' + '.nojekyll';
+export function Create_No_Jekyll(path_build: string) {
+	const filepath = path_build + '/' + '.nojekyll';
 
 
 	/* bail if file exists */
@@ -23,8 +22,8 @@ export function Create_No_Jekyll() {
 
 
 	/* create directory */
-	if (!fs.existsSync(dir_build)) {
-		fs.mkdirSync(dir_build, { recursive: true });
+	if (!fs.existsSync(path_build)) {
+		fs.mkdirSync(path_build, { recursive: true });
 	}
 
 

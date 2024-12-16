@@ -3,6 +3,15 @@
 # (1) Specify your project specific files and directories here. You should     #
 #     only touch this section.                                                 #
 ################################################################################
+services/HestiaFONT_NOTO_EMOJI_COLOR/
+services/HestiaFONT_NOTO_SANS/
+services/HestiaGUI_ANCHOR/
+services/HestiaGUI_BUTTON/
+services/HestiaGUI_CORE/
+services/HestiaGUI_SOCIAL/
+services/HestiaGUI_SOCIAL_BLUESKY/
+services/HestiaGUI_ULIST/
+services/HestiaSOCIAL/
 
 
 
@@ -19,6 +28,8 @@ assets/manifest.webmanifest
 assets/robots.txt
 assets/sitemap.xml
 assets/sitemaps/
+services/app/root.html
+services/app/.root.html
 
 
 

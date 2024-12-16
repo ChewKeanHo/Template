@@ -24,17 +24,13 @@ echo \" <<'RUN_AS_POWERSHELL' >/dev/null # " | Out-Null
 ################################################################################
 # Windows POWERSHELL Codes                                                     #
 ################################################################################
-# execute
-$null = . ".\init.sh.ps1"
-$null = Write-Host "initializing the repository..."
-$null = ng build --aot --configuration production --server main.server.ts | Out-Null
-$null = Remove-Item -Recurse -Force ".\dist" -ErrorAction SilentlyContinue
-$null = [System.IO.File]::FlushAll()
-$null = ng build --aot --configuration production
+${env:WORKSPACE_ROOT} = Get-Location
+${env:WORKSPACE_RUN} = 'production'
+$___process = . "${env:WORKSPACE_ROOT}\services\app\shell\build.ps1"
 ################################################################################
 # Windows POWERSHELL Codes                                                     #
 ################################################################################
-exit
+exit $___process
 <#
 RUN_AS_POWERSHELL
 
@@ -44,13 +40,9 @@ RUN_AS_POWERSHELL
 ################################################################################
 # Unix Main Codes                                                              #
 ################################################################################
-# execute
-. "./init.sh.ps1"
-1>&2 printf -- "%s\n" "initializing the repository..."
-ng build --aot --configuration production --server main.server.ts &> /dev/null
-rm -rf "./dist/" &> /dev/null
-sync
-ng build --aot --configuration production
+WORKSPACE_ROOT="$PWD"
+WORKSPACE_RUN="production"
+. "${WORKSPACE_ROOT}/services/app/shell/build.sh"
 ################################################################################
 # Unix Main Codes                                                              #
 ################################################################################

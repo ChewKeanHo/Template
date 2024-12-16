@@ -3,9 +3,11 @@
  */
 import { Routes } from '@angular/router';
 
-import { Page_Root } from "./contents/page";
-import { Page_404 } from "./contents/404/page";
-import { Page_Lang } from "./contents/lang/page";
+import { METADATA_SITE } from "services/app/Metadata";
+
+import { Page_Root } from "contents/Page";
+import { Page_404 } from "contents/404/Page";
+import { Page_Lang } from "contents/lang/Page";
 
 
 
@@ -16,7 +18,7 @@ export const routes: Routes = [
 		path: '',
 		component: Page_Root,
 		data: {
-			lang: '',
+			lang: 'en',
 		},
 	},
 
@@ -35,5 +37,8 @@ export const routes: Routes = [
 	{
 		path: '**',
 		component: Page_404,
+		data: {
+			lang: 'en',
+		},
 	},
 ];

@@ -1,25 +1,31 @@
 /*
  * COPYRIGHT LICENSE NOTICE HERE
  */
-import { Icon, Application, Protocol_Handler, Screenshot, Shortcut } from '../app/metadata-definitions';
-import { METADATA_SITE } from '../app/metadata';
-import { Get_Base_URL, Yield_URL } from './url';
 import * as fs from 'fs';
 
+import {
+	Application,
+	Media,
+	Metadata_Site,
+	Protocol_Handler,
+	Shortcut,
+	Yield_URL,
+} from 'services/app/Definitions';
 
 
 
-function _process_icons(items: Icon[], url_base: string): any[] {
+
+function _process_icons(items: Media[], url_base: string): any[] {
 	var list = [];
 
 
 	// process list data
 	for (var i = 0; i < items.length; i++) {
-		if (items[i].Source == '') {
+		if (!items[i].Sources || items[i].Sources.length == 0) {
 			continue;
 		}
 
-		if (items[i].Type == '') {
+		if (items[i].Sources[0].Type == '') {
 			continue;
 		}
 
@@ -32,9 +38,9 @@ function _process_icons(items: Icon[], url_base: string): any[] {
 		}
 
 		list.push({
-			src: Yield_URL(items[i].Source, url_base),
+			src: Yield_URL(items[i].Sources[0].URL, url_base),
 			sizes: `${items[i].Width}x${items[i].Height}`,
-			type: items[i].Type,
+			type: items[i].Sources[0].Type,
 			purpose: items[i].Purpose,
 		});
 	}
@@ -77,7 +83,7 @@ function _process_protocol_handlers(items: Protocol_Handler[], name_short: strin
 
 
 
-function _process_related_applications(items: Application[], url_base: string): any[] {
+function _process_related_applications(items: Application[], url_base: string, sku: string): any[] {
 	var list = [];
 
 
@@ -90,7 +96,7 @@ function _process_related_applications(items: Application[], url_base: string): 
 		if (items[i].ID == '') {
 			continue;
 		} else if (items[i].ID == '/') {
-			items[i].ID = METADATA_SITE.ID_SKU;
+			items[i].ID = sku;
 		}
 
 		switch (items[i].Platform) {
@@ -121,41 +127,45 @@ function _process_related_applications(items: Application[], url_base: string): 
 
 
 
-function _process_screenshots(items: Screenshot[], lang: string, url_base: string): any[] {
+function _process_screenshots(items: Media[], lang: string, url_base: string): any[] {
 	var list = [];
 
 
 	// process list data
 	for (var i = 0; i < items.length; i++) {
+		if (!items[i].Sources || items[i].Sources.length == 0) {
+			continue;
+		}
+
 		switch (items[i].Form_Factor) {
 		case "NARROW":
 		case "Narrow":
 		case "narrow":
 			list.push({
-				label: items[i].Label[lang],
+				label: items[i].Text[lang] || '',
 				form_factor: "narrow",
-				src: Yield_URL(items[i].Source, url_base),
+				src: Yield_URL(items[i].Sources[0].URL, url_base),
 				sizes: `${items[i].Width}x${items[i].Height}`,
-				type: items[i].Type,
+				type: items[i].Sources[0].Type,
 			});
 			break;
 		case "WIDE":
 		case "Wide":
 		case "wide":
 			list.push({
-				label: items[i].Label[lang],
+				label: items[i].Text[lang] || '',
 				form_factor: "wide",
-				src: Yield_URL(items[i].Source, url_base),
+				src: Yield_URL(items[i].Sources[0].URL, url_base),
 				sizes: `${items[i].Width}x${items[i].Height}`,
-				type: items[i].Type,
+				type: items[i].Sources[0].Type,
 			});
 			break;
 		default:
 			list.push({
-				label: items[i].Label[lang],
-				src: Yield_URL(items[i].Source, url_base),
+				label: items[i].Text[lang] || '',
+				src: Yield_URL(items[i].Sources[0].URL, url_base),
 				sizes: `${items[i].Width}x${items[i].Height}`,
-				type: items[i].Type,
+				type: items[i].Sources[0].Type,
 			});
 			break;
 		}
@@ -205,47 +215,47 @@ function _process_shortcuts(items: Shortcut[], lang: string, url_base: string): 
 
 
 /* generate manifest.webmanifest with site data */
-function generate_web_manifest(): any {
-	const url_base = Get_Base_URL();
-	const lang = METADATA_SITE.Language_Default;
+function generate_web_manifest(url_base: string, metadata: Metadata_Site): any {
+	const lang = metadata.Language_Default;
 
 
 	/* create settings content */
 	return {
-		name: METADATA_SITE.Name[lang],
-		short_name: METADATA_SITE.ID_SKU,
+		name: metadata.Name[lang],
+		short_name: metadata.ID_SKU,
 		lang: lang,
-		description: METADATA_SITE.Description[lang],
-		categories: METADATA_SITE.Keywords[lang],
-		id: METADATA_SITE.ID,
-		start_url: METADATA_SITE.Protocol.Start,
-		scope: METADATA_SITE.Protocol.Scope,
+		description: metadata.Description[lang],
+		categories: metadata.Keywords[lang],
+		id: metadata.ID,
+		start_url: metadata.Protocol.Start,
+		scope: metadata.Protocol.Scope,
 		protocol_handlers: _process_protocol_handlers(
-			METADATA_SITE.Protocol.Handlers,
-			METADATA_SITE.ID_APP,
+			metadata.Protocol.Handlers,
+			metadata.ID_APP,
 		),
-		display: METADATA_SITE.Display.Primary,
-		display_override: METADATA_SITE.Display.Overrides,
-		orientation: METADATA_SITE.Display.Orientation,
-		theme_color: METADATA_SITE.Color_Theme_Foreground,
-		background_color: METADATA_SITE.Color_Theme_Background,
-		prefer_related_applications: METADATA_SITE.Related_Application.Prioritized,
+		display: metadata.Display.Primary,
+		display_override: metadata.Display.Overrides,
+		orientation: metadata.Display.Orientation,
+		theme_color: metadata.Color_Theme_Foreground,
+		background_color: metadata.Color_Theme_Background,
+		prefer_related_applications: metadata.Related_Application.Prioritized,
 		related_applications: _process_related_applications(
-			METADATA_SITE.Related_Application.List,
+			metadata.Related_Application.List,
 			url_base,
+			metadata.ID_SKU,
 		),
 		screenshots: _process_screenshots(
-			METADATA_SITE.Screenshots,
+			metadata.Screenshots,
 			lang,
 			url_base,
 		),
 		shortcuts: _process_shortcuts(
-			METADATA_SITE.Shortcuts,
+			metadata.Shortcuts,
 			lang,
 			url_base,
 		),
 		icons: _process_icons(
-			METADATA_SITE.Icons,
+			metadata.Icons,
 			url_base,
 		),
 	}
@@ -255,9 +265,8 @@ function generate_web_manifest(): any {
 
 
 /* exported function for creating the web manifest file */
-export function Create_Web_Manifest() {
-	const dir_build = 'assets';
-	const filepath = dir_build + '/' + 'manifest.webmanifest';
+export function Create_Web_Manifest(path_build: string, url_base: string, metadata: Metadata_Site) {
+	const filepath = path_build + '/' + 'manifest.webmanifest';
 
 
 	/* bail if file exists */
@@ -271,13 +280,13 @@ export function Create_Web_Manifest() {
 
 
 	/* create directory */
-	if (!fs.existsSync(dir_build)) {
-		fs.mkdirSync(dir_build, { recursive: true });
+	if (!fs.existsSync(path_build)) {
+		fs.mkdirSync(path_build, { recursive: true });
 	}
 
 
 	/* create new file */
-	const data = generate_web_manifest();
+	const data = generate_web_manifest(url_base, metadata);
 	fs.writeFileSync(filepath, JSON.stringify(data, null, 2));
 
 

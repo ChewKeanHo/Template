@@ -1,12 +1,19 @@
 /*
  * COPYRIGHT LICENSE NOTICE HERE
  */
-import { Owner, Metadata } from './metadata-definitions';
+import { Inject, Injectable, isDevMode, LOCALE_ID, PLATFORM_ID } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { Meta, Title } from '@angular/platform-browser';
+
+
+import { Owner, Metadata_Site, Metadata_Page, Yield_Thumbnails } from './Definitions';
+import { Service_URL } from './URL';
 
 
 
 
-export const METADATA_SITE: Metadata = {
+export const METADATA_SITE: Metadata_Site = {
 	// 'ID' is the general unique identification of the web application. A
 	// good example will be the reversed URI like 'com.example.www.project'.
 	//
@@ -56,7 +63,7 @@ export const METADATA_SITE: Metadata = {
 	//
 	// Leaving this field empty can cause catastrophic failure.
 	Name: {
-		"en": "Site Title Here",
+		"en": "Project Example",
 	},
 
 
@@ -80,7 +87,6 @@ export const METADATA_SITE: Metadata = {
 	Keywords: {
 		"en": [
 			"website",
-			"webapp",
 		],
 	},
 
@@ -88,13 +94,13 @@ export const METADATA_SITE: Metadata = {
 	// 'Color_Theme_Foreground' sets the color of the foreground objects.
 	//
 	// Leaving this field empty can cause catastrophic failure.
-	Color_Theme_Foreground: "#FFFF00",
+	Color_Theme_Foreground: "#FFFFFF",
 
 
 	// 'Color_Theme_Background' sets the color of the background.
 	//
 	// Leaving this field empty can cause catastrophic failure.
-	Color_Theme_Background: "#000428",
+	Color_Theme_Background: "#021B79",
 
 
 	// 'Owners' sets the list of owners of this site. The first entry is
@@ -154,29 +160,43 @@ export const METADATA_SITE: Metadata = {
 	Owners: [{
 		UUID: '',
 		Name_Family: {
-			"en": "Familia",
+			"en": "Holloway",
 		},
 		Name_Given: {
-			"en": "Own Name",
+			"en": "Kean Ho",
 		},
 		Call_Sign: {
-			"en": "Brand Name",
+			"en": "HollowayKeanHo",
 		},
 		Title: {
 			"en": "Mr.",
 		},
 		Description: {
-			"en": "Simple Pitch",
+			"en": "Forward-thinking technology explorer.",
 		},
 		Slogan: {
-			"en": "Simple speech",
+			"en": "Learn, Internalize, Grow, and Expand.",
 		},
 		Contacts: {
-			website_01: {
+			bluesky_01: {
 				"en": {
-					ID: "Official Website",
-					Type: "website",
-					URL: "https://www.example.com",
+					ID: "hollowaykeanho.com",
+					Type: "bluesky",
+					URL: "https://bsky.app/profile/hollowaykeanho.com",
+				},
+			},
+			github_01: {
+				"en": {
+					ID: "HollowayKeanHo",
+					Type: "github",
+					URL: "https://github.com/hollowaykeanho",
+				},
+			},
+			mastodon_01: {
+				"en": {
+					ID: "@hollowaykeanho",
+					Type: "mastodon",
+					URL: "https://mastodon.online/@hollowaykeanho",
 				},
 			},
 		},
@@ -371,13 +391,15 @@ Allow: /
 	// empty ('').
 	//
 	//
-	// 'Icons' are the list of display icon for the shortcut.
+	// 'Icons' are the list of display icon for the shortcut. Only the first
+	//  entry of the 'Sources' is used. 'Sources.0.Text' is unused but is
+	//  defined due to type requirement.
 	//
-	//  (1) 'Source' is the icon's source URL. The engine can convert
+	//  (1) 'Sources.0.URL' is the icon's source URL. The engine can convert
 	//       relative URL to its absolute version in production mode
 	//       autonomously. It will skip the entry if left empty ('').
-	//  (2) 'Type' is the icon's MIME ID. The engine will skip the entry
-	//      if left empty ('').
+	//  (2) 'Sources.0.Type' is the icon's MIME ID. The engine will skip the
+	//      entry if left empty ('').
 	//  (3) 'Purpose' is the icon's PWA use intent. the value can be:
 	//         (a) 'any'      = use in any mode; OR
 	//         (b) 'maskable' = use only for color re-masking.
@@ -386,15 +408,18 @@ Allow: /
 	//      is invalid (less than or equal to 0).
 	//
 	//  Example:
-	//          Icons: [{
-	//                  Source: '/logos/icon_57x57.png',
-	//                  Type: 'image/png',
-	//                  Purpose: 'any',
-	//                  Width: 57,
-	//                  Height: 57,
-	//          }, {
-	//                  ...
-	//          }],
+	//      Icons: [{
+	//              Text: {},
+	//              Sources: [{
+	//                      URL: '/logos/icon_1200x1200.png',
+	//                      Type: 'image/png',
+	//              }],
+	//              Width: 1200,
+	//              Height: 1200,
+	//              Purpose: 'any',
+	//      }, {
+	//              ...
+	//      }],
 	Shortcuts: [{
 		URL: '/',
 		Name_Long: {
@@ -407,11 +432,14 @@ Allow: /
 			"en": "To the main overview page.",
 		},
 		Icons: [{
-			Source: '/logos/icon_1200x1200.png',
-			Type: 'image/png',
-			Purpose: 'any',
+			Text: {},
+			Sources: [{
+				URL: '/logos/icon_1200x1200.png',
+				Type: 'image/png',
+			}],
 			Width: 1200,
 			Height: 1200,
+			Purpose: 'any',
 		}],
 	}],
 
@@ -419,7 +447,7 @@ Allow: /
 	// 'Screenshots' are the list of marketing screenshots for the
 	// application.
 	//
-	//  (1) 'Label' is the text label of the media. It can be used as the
+	//  (1) 'Text' is the text label of the media. It can be used as the
 	//      alternate text if required. This field is internationalized
 	//      (i18n). The engine will skip the entry if left empty ('').
 	//  (2) 'Form_Factor' is the setting for displaying the screenshot on
@@ -427,54 +455,133 @@ Allow: /
 	//        (a) empty ('') = always display the media; OR
 	//        (b) 'wide'     = only display on horizontal widescreen; OR
 	//        (c) 'narrow'   = only display on vertical narrow screen.
-	//  (3) 'Source' is the screenshot's source URL. The engine can
-	//       convert relative URL to its absolute version in production
-	//       mode autonomously. If left empty (''), the engine will skip
-	//       the entry.
-	//  (4) 'Type' is the icon's MIME ID. The engine will skip the entry
-	//      if left empty.
-	//  (5) 'Width' and 'Height' are the default dimension
+	//  (3) 'Sources' are the list of screenshot's source URL. Only the
+	//      first entry (0) is used. The engine can convert relative URL
+	//      to its absolute version in production mode autonomously. If
+	//      left empty (''), the engine will skip the entry.
+	//  (4) 'Sources.0.URL' is the icon's Source URL. The engine will skip
+	//      the entry if left empty.
+	//  (5) 'Sources.0.Type' is the icon's MIME ID. The engine will skip
+	//      the entry if left empty.
+	//  (6) 'Width' and 'Height' are the default dimension
 	//      of the icon in pixel. The engine will skip the entry if any
 	//      of them is invalid (less than or equal to 0).
 	//
 	//  Example:
 	//          Screenshots: [{
-	//                  Label: {
+	//                  Text: {
 	//                          "en": 'Welcome',
 	//                  },
 	//                  Form_Factor: 'wide',
-	//                  Source: '/screenshots/welcome_1200x630.png',
-	//                  Type: 'image/png',
+	//                  Sources: [{
+	//                          URL: '/screenshots/welcome_1200x630.png',
+	//                          Type: 'image/png',
+	//                  }],
 	//                  Width: 1200,
 	//                  Height: 630,
 	//          }, {
 	//                  ...
 	//          }],
 	Screenshots: [{
-		Label: {
+		Text: {
 			"en": 'Welcome',
 		},
 		Form_Factor: 'wide',
-		Source: '/screenshots/welcome_1200x630.png',
-		Type: 'image/png',
+		Sources: [{
+			URL: '/screenshots/welcome_1200x630.png',
+			Type: 'image/png',
+		}],
 		Width: 1200,
 		Height: 630,
 	}, {
-		Label: {
+		Text: {
 			"en": 'Welcome',
 		},
 		Form_Factor: 'narrow',
-		Source: '/screenshots/welcome_630x1200.png',
-		Type: 'image/png',
+		Sources: [{
+			URL: '/screenshots/welcome_630x1200.png',
+			Type: 'image/png',
+		}],
 		Width: 630,
 		Height: 1200,
 	}, {
-		Label: {
+		Text: {
 			"en": 'Welcome',
 		},
-		Form_Factor: '',
-		Source: '/screenshots/welcome_1200x1200.png',
-		Type: 'image/png',
+		Sources: [{
+			URL: '/screenshots/welcome_1200x1200.png',
+			Type: 'image/png',
+		}],
+		Width: 1200,
+		Height: 1200,
+	}],
+
+
+	// 'Thumbnails' are the list of default page thumbnails for fallback
+	// purposes.
+	//
+	//  (1) 'Text' is the text label of the media content (not a caption).
+	//      This field is internationalized (i18n). The engine will use
+	//      the page or site title if left empty ('').
+	//  (3) 'Sources' are the list of screenshot's source URL. Only the
+	//      first entry (0) is used. The engine can convert relative URL
+	//      to its absolute version in production mode autonomously. If
+	//      left empty (''), the engine will skip the entry.
+	//  (4) 'Sources.0.URL' is the icon's Source URL. The engine will skip
+	//      the entry if left empty.
+	//  (5) 'Sources.0.Type' is the icon's MIME ID. The engine only
+	//      accepts 'image/*', 'video/*', and 'audio/*' types currently.
+	//      It will skip the entry if other types are supplied or left
+	//      empty.
+	//  (6) 'Width' and 'Height' are the default dimension
+	//      of the icon in pixel. The engine will skip the entry if any
+	//      of them is invalid (less than or equal to 0).
+	//
+	//  Example:
+	//          Thumbnails: [{
+	//                  Text: {
+	//                          "en": 'A thumbnail image',
+	//                  },
+	//                  Form_Factor: 'wide',
+	//                  Sources: [{
+	//                          URL: '/thumbnails/default_1200x630.png',
+	//                          Type: 'image/png',
+	//                  }],
+	//                  Width: 1200,
+	//                  Height: 630,
+	//          }, {
+	//                  ...
+	//          }],
+	Thumbnails: [{
+		Text: {
+			"en": 'A thumbnail image',
+		},
+		Form_Factor: 'wide',
+		Sources: [{
+			URL: '/thumbnails/default_480x480.png',
+			Type: 'image/png',
+		}],
+		Width: 480,
+		Height: 480,
+	}, {
+		Text: {
+			"en": 'A thumbnail image',
+		},
+		Form_Factor: 'narrow',
+		Sources: [{
+			URL: '/thumbnails/default_1200x630.png',
+			Type: 'image/png',
+		}],
+		Width: 1200,
+		Height: 630,
+	}, {
+		Text: {
+			"en": 'A thumbnail image',
+		},
+		Sources: [{
+			URL: '/thumbnails/default_1200x1200.png',
+			Type: 'image/png',
+		}],
 		Width: 1200,
 		Height: 1200,
 	}],
@@ -482,160 +589,232 @@ Allow: /
 
 	// 'Icons' are the list of display icon for the site.
 	//
-	//  (1) 'Source' is the icon's source URL. The engine can convert
-	//       relative URL to its absolute version in production mode
-	//       autonomously. It will skip the entry if left empty ('').
-	//  (2) 'Type' is the icon's MIME ID. The engine will skip the entry
-	//      if left empty ('').
-	//  (3) 'Purpose' is the icon's PWA use intent. the value can be:
+	//  (1) 'Sources' are the list icon's source URL. Only the first
+	//      entry is used. The engine can convert relative URL to its
+	//      absolute version in production mode autonomously. It will
+	//      skip the entry if left empty ([]).
+	//  (2) 'Source.0.URL' is the icon's source URL. The engine will skip
+	//      the entry if left empty ('').
+	//  (3) 'Source.0.Type' is the icon's MIME ID. The engine will skip
+	//      the entry if left empty ('').
+	//  (4) 'Purpose' is the icon's PWA use intent. the value can be:
 	//         (a) 'any'      = use in any mode; OR
 	//         (b) 'maskable' = use only for color re-masking.
-	//  (4) 'Width' and 'Height' are the default dimension of the icon
+	//  (5) 'Width' and 'Height' are the default dimension of the icon
 	//      in pixel unit. The engine will skip the entry if any of them
 	//      is invalid (less than or equal to 0).
 	//
 	//  Example:
 	//          Icons: [{
-	//                  Source: '/logos/icon_57x57.png',
-	//                  Type: 'image/png',
-	//                  Purpose: 'any',
+	//                  Text: {},
+	//                  Sources: [{
+	//                          URL: '/logos/icon_57x57.png',
+	//                          Type: 'image/png',
+	//                  }],
 	//                  Width: 57,
 	//                  Height: 57,
+	//                  Purpose: 'any',
 	//          }, {
 	//                  ...
 	//          }],
 	Icons: [{
-		Source: '/logos/icon_57x57.png',
-		Type: 'image/png',
-		Purpose: 'any',
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_57x57.png',
+			Type: 'image/png',
+		}],
 		Width: 57,
 		Height: 57,
-	}, {
-		Source: '/logos/icon_60x60.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_60x60.png',
+			Type: 'image/png',
+		}],
 		Width: 60,
 		Height: 60,
-	}, {
-		Source: '/logos/icon_70x70.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_70x70.png',
+			Type: 'image/png',
+		}],
 		Width: 70,
 		Height: 70,
-	}, {
-		Source: '/logos/icon_72x72.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_72x72.png',
+			Type: 'image/png',
+		}],
 		Width: 72,
 		Height: 72,
-	}, {
-		Source: '/logos/icon_76x76.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_76x76.png',
+			Type: 'image/png',
+		}],
 		Width: 76,
 		Height: 76,
-	}, {
-		Source: '/logos/icon_96x96.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_96x96.png',
+			Type: 'image/png',
+		}],
 		Width: 96,
 		Height: 96,
-	}, {
-		Source: '/logos/icon_114x114.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_114x114.png',
+			Type: 'image/png',
+		}],
 		Width: 114,
 		Height: 114,
-	}, {
-		Source: '/logos/icon_120x120.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_120x120.png',
+			Type: 'image/png',
+		}],
 		Width: 120,
 		Height: 120,
-	}, {
-		Source: '/logos/icon_128x128.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_128x128.png',
+			Type: 'image/png',
+		}],
 		Width: 128,
 		Height: 128,
-	}, {
-		Source: '/logos/icon_144x144.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_144x144.png',
+			Type: 'image/png',
+		}],
 		Width: 144,
 		Height: 144,
-	}, {
-		Source: '/logos/icon_150x150.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_150x150.png',
+			Type: 'image/png',
+		}],
 		Width: 150,
 		Height: 150,
-	}, {
-		Source: '/logos/icon_152x152.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_152x152.png',
+			Type: 'image/png',
+		}],
 		Width: 152,
 		Height: 152,
-	}, {
-		Source: '/logos/icon_180x180.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_180x180.png',
+			Type: 'image/png',
+		}],
 		Width: 180,
 		Height: 180,
-	}, {
-		Source: '/logos/icon_192x192.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_192x192.png',
+			Type: 'image/png',
+		}],
 		Width: 192,
 		Height: 192,
-	}, {
-		Source: '/logos/icon_310x310.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_310x310.png',
+			Type: 'image/png',
+		}],
 		Width: 310,
 		Height: 310,
-	}, {
-		Source: '/logos/icon_384x384.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_384x384.png',
+			Type: 'image/png',
+		}],
 		Width: 384,
 		Height: 384,
-	}, {
-		Source: '/logos/icon_480x480.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_480x480.png',
+			Type: 'image/png',
+		}],
 		Width: 480,
 		Height: 480,
-	}, {
-		Source: '/logos/icon_512x512.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_512x512.png',
+			Type: 'image/png',
+		}],
 		Width: 512,
 		Height: 512,
-	}, {
-		Source: '/logos/icon_1024x1024.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_1024x1024.png',
+			Type: 'image/png',
+		}],
 		Width: 1024,
 		Height: 1024,
-	}, {
-		Source: '/logos/icon_1200x1200.svg',
-		Type: 'image/svg+xml',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_1200x1200.svg',
+			Type: 'image/svg+xml',
+		}],
 		Width: 1200,
 		Height: 1200,
-	}, {
-		Source: '/logos/icon_1200x1200.png',
-		Type: 'image/png',
 		Purpose: 'any',
+	}, {
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon_1200x1200.png',
+			Type: 'image/png',
+		}],
 		Width: 1200,
 		Height: 1200,
+		Purpose: 'any',
 	}, {
-		Source: '/logos/icon-monochrome_1200x1200.svg',
-		Type: 'image/svg+xml',
+		Text: {},
+		Sources: [{
+			URL: '/logos/icon-monochrome_1200x1200.svg',
+			Type: 'image/svg+xml',
+		}],
+		Width: 1200,
+		Height: 1200,
 		Purpose: 'maskable',
-		Width: 1200,
-		Height: 1200,
 	}],
 
 
@@ -676,4 +855,168 @@ Allow: /
 		],
 		Orientation: 'any',
 	},
+}
+
+
+
+
+@Injectable({
+	providedIn: 'root',
+})
+export class Service_Page {
+	public constructor(
+		@Inject(DOCUMENT) private document: Document,
+		@Inject(LOCALE_ID) private locale: string,
+		private service_url: Service_URL,
+		private meta: Meta,
+		private title: Title,
+	) {}
+
+
+	public Init(metadata: Metadata_Page): number {
+		// validate input
+		if (metadata.Lang == '') {
+			metadata.Lang = 'en';
+		}
+
+		if (metadata.Title == '') {
+			return 1;
+		}
+
+		if (metadata.Description == '') {
+			return 1;
+		}
+
+		if (metadata.Keywords == '') {
+			return 1;
+		}
+
+		if (!metadata.Site) {
+			metadata.Site = METADATA_SITE;
+		}
+
+		if (metadata.Site.Color_Theme_Foreground == '') {
+			return 1;
+		}
+
+		if (metadata.Site.Color_Theme_Background == '') {
+			return 1;
+		}
+
+
+		// initiate page language
+		this.locale = metadata.Lang;
+		this.document.documentElement.lang = metadata.Lang;
+
+
+		// setup page-level metadata
+		this.title.setTitle(metadata.Title);
+
+		this.meta.updateTag({
+			name: 'description',
+			content: metadata.Description,
+		});
+
+		this.meta.updateTag({
+			name: 'keywords',
+			content: metadata.Keywords,
+		});
+
+		this.meta.updateTag({
+			name: 'theme-color',
+			content: metadata.Site.Color_Theme_Foreground,
+		});
+
+		this.meta.updateTag({
+			name: 'msapplication-TileColor',
+			content: metadata.Site.Color_Theme_Background,
+		});
+
+
+		// setup open-graph metadata
+		this.meta.updateTag({
+			property: 'og:title',
+			content: metadata.Title,
+		});
+
+		this.meta.updateTag({
+			property: 'og:site_name',
+			content: metadata.Site.Name[metadata.Lang],
+		});
+
+		this.meta.updateTag({
+			property: 'og:locale',
+			content: metadata.Lang,
+		});
+
+		this.meta.updateTag({
+			property: 'og:description',
+			content: metadata.Description,
+		});
+
+		this.meta.updateTag({
+			property: 'og:url',
+			content: metadata.URL,
+		});
+
+		var thumbnails = Yield_Thumbnails(
+			metadata.Thumbnails,
+			this.service_url.Get_Base_URL(),
+			metadata.Lang,
+			metadata.Title,
+		);
+
+		for (var i = 0; i < thumbnails.length; i++) {
+			if (thumbnails[i].Sources[0].Type.startsWith('image/')) {
+				// an image
+				this.meta.addTags([{
+					property: 'og:image',
+					content: thumbnails[i].Sources[0].URL,
+				}, {
+					property: 'og:image:type',
+					content: thumbnails[i].Sources[0].Type,
+				}, {
+					property: 'og:image:width',
+					content: `${thumbnails[i].Width}`,
+				}, {
+					property: 'og:image:height',
+					content: `${thumbnails[i].Height}`,
+				}, {
+					property: 'og:image:alt',
+					content: thumbnails[i].Text[metadata.Lang],
+				}]);
+			} else if (thumbnails[i].Sources[0].Type.startsWith('video/')) {
+				// a video
+				this.meta.addTags([{
+					property: 'og:video',
+					content: thumbnails[i].Sources[0].URL,
+				}, {
+					property: 'og:video:type',
+					content: thumbnails[i].Sources[0].Type,
+				}, {
+					property: 'og:video:width',
+					content: `${thumbnails[i].Width}`,
+				}, {
+					property: 'og:video:height',
+					content: `${thumbnails[i].Height}`,
+				}, {
+					property: 'og:video:alt',
+					content: thumbnails[i].Text[metadata.Lang],
+				}]);
+			} else if (thumbnails[i].Sources[0].Type.startsWith('video/')) {
+				// an audio
+				this.meta.addTags([{
+					property: 'og:audio',
+					content: thumbnails[i].Sources[0].URL,
+				}, {
+					property: 'og:audio:type',
+					content: thumbnails[i].Sources[0].Type,
+				}]);
+			};
+		}
+
+
+		// report status
+		return 0;
+	}
 }

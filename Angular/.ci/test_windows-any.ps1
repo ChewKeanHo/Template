@@ -45,13 +45,6 @@ if ($(OS-Is-Run-Simulated) -eq 0) {
 	$null = I18N-Simulate-Testing
 	return 0
 } else {
-	$___browser = Get-Command "chrome.exe" -ErrorAction SilentlyContinue
-	if ($(STRINGS-Is-Empty "${___browser}") -eq 0) {
-		$null = I18N-Run-Failed
-		return 1
-	}
-	$env:CHROME_BIN = $___browser
-
 	$___process = OS-Exec "./test.sh.ps1"
 	if ($___process -ne 0) {
 		$null = I18N-Run-Failed

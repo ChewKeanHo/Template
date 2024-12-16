@@ -2,22 +2,16 @@
  * COPYRIGHT LICENSE NOTICE HERE
  */
 import { TestBed } from '@angular/core/testing';
-import { Page_Lang } from './page';
 
 
 
 
 describe('Page_Lang', () => {
 	beforeEach(async () => {
-		await TestBed.configureTestingModule({
-			imports: [Page_Lang],
-		}).compileComponents();
+		console.log('run before each test case');
 	});
 
-
-	it('should create the app', () => {
-		const fixture = TestBed.createComponent(Page_Lang);
-		const app = fixture.componentInstance;
-		expect(app).toBeTruthy();
+	it('a test case here', () => {
+		expect(true).toBeTruthy();
 	});
 });

@@ -30,6 +30,7 @@ $null = Set-Location "${env:PROJECT_PATH_ROOT}\${env:PROJECT_ANGULAR}"
 
 $null = FS-Remove-Silently "dist"
 $null = FS-Remove-Silently "node_modules"
+$null = FS-Remove-Silently ".angular"
 
 $null = Set-Location "${__current_path}"
 $null = Remove-Variable __current_path

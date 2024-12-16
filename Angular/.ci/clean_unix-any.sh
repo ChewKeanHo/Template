@@ -31,6 +31,7 @@ cd "${PROJECT_PATH_ROOT}/${PROJECT_ANGULAR}"
 
 FS_Remove_Silently "dist"
 FS_Remove_Silently "node_modules"
+FS_Remove_Silently ".angular"
 
 cd "$__current_path"
 unset __current_path

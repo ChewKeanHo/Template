@@ -1,21 +1,18 @@
 /*
  * COPYRIGHT LICENSE NOTICE HERE
  */
-import { METADATA_SITE } from '../app/metadata';
-import { Get_Base_URL } from './url';
 import * as fs from 'fs';
 
 
 
 
 /* exported function for creating the CNAME configuration file */
-export function Create_CNAME() {
-	const dir_build = 'assets';
-	const filepath = dir_build + '/' + 'CNAME';
+export function Create_CNAME(path_build: string, cname: string) {
+	const filepath = path_build + '/' + 'CNAME';
 
 
 	/* check for requirement */
-	if (!METADATA_SITE.ID_CNAME) {
+	if (!cname) {
 		return;
 	}
 
@@ -31,13 +28,13 @@ export function Create_CNAME() {
 
 
 	/* create directory */
-	if (!fs.existsSync(dir_build)) {
-		fs.mkdirSync(dir_build, { recursive: true });
+	if (!fs.existsSync(path_build)) {
+		fs.mkdirSync(path_build, { recursive: true });
 	}
 
 
 	/* create new file */
-	fs.writeFileSync(filepath, METADATA_SITE.ID_CNAME);
+	fs.writeFileSync(filepath, cname);
 
 
 	/* report status */
