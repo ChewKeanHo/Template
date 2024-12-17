@@ -21,15 +21,19 @@ services/HestiaSOCIAL/
 # (1) These are auto-generated asset files. Leave them as it is in order to    #
 #     maintain good and proper performance.                                    #
 ################################################################################
-assets/.nojekyll
-assets/CNAME
-assets/browserconfig.xml
 assets/manifest.webmanifest
-assets/robots.txt
+assets/CNAME
+assets/sitemaps
 assets/sitemap.xml
-assets/sitemaps/
+assets/robots.txt
+assets/browserconfig.xml
+assets/.nojekyll
 services/app/root.html
 services/app/.root.html
+dist/
+.angular/
+node_modules/
+coverage/
 
 
 

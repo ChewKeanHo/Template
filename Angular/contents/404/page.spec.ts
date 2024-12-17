@@ -6,7 +6,7 @@ import { TestBed } from '@angular/core/testing';
 
 
 
-describe('Page_Lang', () => {
+describe('Page_404', () => {
 	beforeEach(async () => {
 		console.log('run before each test case');
 	});

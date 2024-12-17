@@ -37,7 +37,7 @@ fi
 
 I18N_Import_Dependencies
 __current_path="$PWD" && cd "${PROJECT_PATH_ROOT}/${PROJECT_ANGULAR}"
-npm install
+./setup.sh.ps1
 ___process=$?
 cd "$__current_path" && unset __current_path
 if [ $___process -ne 0 ]; then

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2024 (Holloway) Chew, Kean Ho <hollowaykeanho@gmail.com>
+# Copyright 2023 (Holloway) Chew, Kean Ho <hollowaykeanho@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License. You may obtain a copy of
@@ -20,21 +20,21 @@ if [ "$PROJECT_PATH_ROOT" = "" ]; then
         return 1
 fi
 
-. "${LIBS_AUTOMATACI}/services/io/fs.sh"
+. "${LIBS_AUTOMATACI}/services/i18n/translations.sh"
 
 
 
 
 # execute
-__current_path="$PWD"
-cd "${PROJECT_PATH_ROOT}/${PROJECT_ANGULAR}"
-
-FS_Remove_Silently "dist"
-FS_Remove_Silently "node_modules"
-FS_Remove_Silently ".angular"
-
-cd "$__current_path"
-unset __current_path
+I18N_Build "$PROJECT_ANGULAR"
+__current_path="$PWD" && cd "${PROJECT_PATH_ROOT}/${PROJECT_ANGULAR}"
+./clean.sh.ps1
+___process=$?
+cd "$__current_path" && unset __current_path
+if [ $___process -ne 0 ]; then
+        I18N_Build_Failed
+        return 1
+fi
 
 
 

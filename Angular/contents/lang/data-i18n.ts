@@ -28,6 +28,7 @@ export class Data_Page extends Metadata_Page {
 		this.URL = route.snapshot.url.toString();
 		this.Site = METADATA_SITE;
 
+
 		// setting language-specific metadata
 		switch (route.snapshot.data['lang']) {
 		case 'en':
@@ -37,9 +38,10 @@ export class Data_Page extends Metadata_Page {
 			this.Lang = 'en';
 			this.Title = 'Language-Specific Landing Page';
 			this.Description = 'the language-specific landing page.';
-			this.Keywords = `website, landing, ${this.Lang}`;
+			this.Keywords = 'website, landing, en';
 			break;
 		}
+
 
 		// initiate the page
 		this.service.Init(this);

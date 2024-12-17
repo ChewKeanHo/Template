@@ -1,6 +1,4 @@
 body {
 	/* define all your font family here */
-	font-family: var(--font-family-noto-emoji-color),
-			var(--font-family-noto-sans),
-			var(--font-family-web-safe-sans-serif);
+	font-family: var(--font-family-web-safe-sans-serif);
 }

@@ -9,4 +9,4 @@ if ("${env:WORKSPACE_RUN}" -eq "") {
 # execute
 $null = . "${env:WORKSPACE_ROOT}\services\app\shell\init.ps1"
 $null = ng serve
-exit $?
+return $?

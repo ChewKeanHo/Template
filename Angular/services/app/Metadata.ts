@@ -63,7 +63,7 @@ export const METADATA_SITE: Metadata_Site = {
 	//
 	// Leaving this field empty can cause catastrophic failure.
 	Name: {
-		"en": "Project Example",
+		"en": "Example Website",
 	},
 
 
@@ -74,7 +74,7 @@ export const METADATA_SITE: Metadata_Site = {
 	//
 	// Leaving this field empty can cause catastrophic failure.
 	Description: {
-		"en": "An example web app.",
+		"en": "An example website.",
 	},
 
 
@@ -160,7 +160,7 @@ export const METADATA_SITE: Metadata_Site = {
 	Owners: [{
 		UUID: '',
 		Name_Family: {
-			"en": "Holloway",
+			"en": "Chew",
 		},
 		Name_Given: {
 			"en": "Kean Ho",
@@ -178,6 +178,13 @@ export const METADATA_SITE: Metadata_Site = {
 			"en": "Learn, Internalize, Grow, and Expand.",
 		},
 		Contacts: {
+			email_01: {
+				"en": {
+					ID: "hello@hollowaykeanho.com",
+					Type: "email",
+					URL: "hello@hollowaykeanho.com",
+				},
+			},
 			bluesky_01: {
 				"en": {
 					ID: "hollowaykeanho.com",
@@ -197,6 +204,34 @@ export const METADATA_SITE: Metadata_Site = {
 					ID: "@hollowaykeanho",
 					Type: "mastodon",
 					URL: "https://mastodon.online/@hollowaykeanho",
+				},
+			},
+			orcid_01: {
+				"en": {
+					ID: "0000-0003-4202-4863",
+					Type: "orcid",
+					URL: "https://orcid.org/0000-0003-4202-4863",
+				},
+			},
+			website_01: {
+				"en": {
+					ID: "(Holloway) Chew, Kean Ho",
+					Type: "website",
+					URL: "https://www.hollowaykeanho.com",
+				},
+			},
+			youtube_01: {
+				"en": {
+					ID: "@chewkeanho",
+					Type: "youtube",
+					URL: "https://www.youtube.com/@chewkeanho",
+				},
+			},
+			zenodo_01: {
+				"en": {
+					ID: "chewkeanho",
+					Type: "zenodo",
+					URL: "https://zenodo.org/communities/chewkeanho/",
 				},
 			},
 		},
@@ -874,6 +909,12 @@ export class Service_Page {
 
 
 	public Init(metadata: Metadata_Page): number {
+		// valdiate base url (redirect to proper base URL)
+		if (!this.service_url.Validate_Current_URL(metadata.URL)) {
+			return 1;
+		}
+
+
 		// validate input
 		if (metadata.Lang == '') {
 			metadata.Lang = 'en';

@@ -247,7 +247,7 @@ ${og_thumbnails}
 <body>
 	<main>
 		<app-root></app-root>
-		<div><noscript style='
+		<noscript style='
 			position: absolute;
 			top: -100%;
 			left: 0%;
@@ -261,7 +261,7 @@ ${og_thumbnails}
 			color: ${color_foreground};
 		'>
 			${noscript}
-		</noscript></div>
+		</noscript>
 	</main>
 	<footer><app-footer></app-footer></footer>
 </body>

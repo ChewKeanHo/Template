@@ -1,4 +1,4 @@
-# Copyright 2024 (Holloway) Chew, Kean Ho <hollowaykeanho@gmail.com>
+# Copyright 2023 (Holloway) Chew, Kean Ho <hollowaykeanho@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License. You may obtain a copy
@@ -19,21 +19,23 @@ if (-not (Test-Path -Path $env:PROJECT_PATH_ROOT)) {
 	return 1
 }
 
-. "${env:LIBS_AUTOMATACI}\services\io\fs.ps1"
+. "${env:LIBS_AUTOMATACI}\services\io\os.ps1"
+. "${env:LIBS_AUTOMATACI}\services\i18n\translations.ps1"
 
 
 
 
 # execute
+$null = I18N-Build "${env:PROJECT_ANGULAR}"
 $__current_path = Get-Location
 $null = Set-Location "${env:PROJECT_PATH_ROOT}\${env:PROJECT_ANGULAR}"
-
-$null = FS-Remove-Silently "dist"
-$null = FS-Remove-Silently "node_modules"
-$null = FS-Remove-Silently ".angular"
-
-$null = Set-Location "${__current_path}"
+$___process = OS-Exec ".\clean.sh.ps1"
+$null = Set-Location $__current_path
 $null = Remove-Variable __current_path
+if ($___process -ne 0) {
+	$null = I18N-Build-Failed
+	return 1
+}
 
 
 

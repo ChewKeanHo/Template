@@ -39,7 +39,7 @@ export class Data_Page extends Metadata_Page {
 			this.Lang = 'en';
 			this.Title = this.Site.Name[this.Lang];
 			this.Description = 'Hello World';
-			this.Keywords = 'website, landing, root';
+			this.Keywords = 'website, landing';
 			break;
 		}
 

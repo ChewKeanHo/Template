@@ -48,28 +48,32 @@ $ cd Angular/
 
 
 # (2) run any of the following matching your intention:
+$ ./setup.sh.ps1    # for setup
 $ ./serve.sh.ps1    # for development
-$ ./test.sh.ps1     # for test run
+$ ./test.sh.ps1     # for test
 $ ./build.sh.ps1    # for build
 $ ./watch.sh.ps1    # for watch
+$ ./clean.sh.ps1    # for clean up
 ```
 
 This is mainly due to Angular does not have any pre-initialization function
 to update critical SEO files generations autonomously & dynamically. Affected
 files are:
 
-* `assets/browserconfig.xml`
+* `assets/manifest.webmanifest`
 * `assets/CNAME`
-* `assets/.nojekyll`
+* `assets/sitemaps`
 * `assets/sitemap.xml`
 * `assets/robots.txt`
-* `assets/manifest.webmanifest`
+* `assets/browserconfig.xml`
+* `assets/.nojekyll`
 * `services/app/root.html`
 
-This includes the `index.html` (`services/app/root.html`) that `angular.json`
-depends on. To workaround this issue, a 2-steps execution is done using the
-Shell (and PowerShell on Windows) scripts where Stage-1 is to prepare these
-criticaly files dynamically while Stage-2 is your designated execution.
+This includes the `index.html` main template file (`services/app/root.html`)
+that `angular.json` uses. To workaround this issue, a 2-steps execution is
+done using the Shell (and PowerShell on Windows) scripts where Stage-1 is to
+prepare these criticaly files dynamically while Stage-2 is your designated
+execution.
 
 Those shell scripts are Polygot in nature so the same script works on both
 UNIX and Windows OSes natively.
@@ -165,8 +169,8 @@ The `services/app/root.html` (main template file) is dynamically generated
 in Stage-1 execution with the site-level thumbnails meta included.
 
 Currently, Angular updates the meta tags dynamically using `Meta` and `Title`
-services from `@angular/platform-browser` library. There is no way to statically
-generate/patch the output `index.html` file yet.
+services from `@angular/platform-browser` library. There is no way to
+statically generate/patch the output `index.html` file yet.
 
 Recommended media dimension would be:
 

@@ -37,7 +37,7 @@ if ($___process -ne 0) {
 $null = I18N-Import-Dependencies
 $__current_path = Get-Location
 $null = Set-Location "${env:PROJECT_PATH_ROOT}\${env:PROJECT_ANGULAR}"
-$___process = OS-Exec "npm" "install"
+$___process = OS-Exec "powershell" ".\setup.sh.ps1"
 $null = Set-Location "${__current_path}"
 $null = Remove-Variable -Name __current_path
 if ($___process -ne 0) {

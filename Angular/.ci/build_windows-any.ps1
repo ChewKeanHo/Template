@@ -47,7 +47,7 @@ if ($___process -ne 0) {
 $null = I18N-Build "${env:PROJECT_ANGULAR}"
 $__current_path = Get-Location
 $null = Set-Location "${env:PROJECT_PATH_ROOT}\${env:PROJECT_ANGULAR}"
-$___process = OS-Exec "./build.sh.ps1"
+$___process = OS-Exec ".\build.sh.ps1"
 $null = Set-Location "${__current_path}"
 $null = Remove-Variable __current_path
 if ($___process -ne 0) {
